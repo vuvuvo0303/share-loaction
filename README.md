@@ -84,3 +84,9 @@ Có thể giữ nguyên Firebase Spark và deploy frontend lên Vercel. Hobby d�
 Domain Vercel khác Netlify/localhost nên phải đăng nhập và cấp quyền vị trí một lần trên domain mới. Tọa độ và role vẫn theo UID tài khoản Firebase.
 
 Tài liệu: https://vercel.com/docs/frameworks/frontend/vite và https://vercel.com/docs/plans/hobby
+
+### Cấu hình Vercel đã nằm trong source
+
+vercel.json đặt Vite, npm ci, npm run build, dist, SPA fallback và Referrer-Policy. package.json/.nvmrc chọn Node 22. .env.production đã chứa Firebase Web config công khai cho project hiện tại và được đưa lên Git cùng source. Có thể import repository và Deploy mà không nhập lại các biến này trên Vercel. Nếu trước đó đã đặt biến trên Vercel, chúng ưu tiên hơn .env.production; sửa/xóa biến cũ nếu trỏ sang project khác.
+
+.env.local vẫn chỉ ở máy dev; .vercel/ được ignore. Không thêm private key/service account vào .env.production. Sau khi có domain, vẫn cần thêm domain vào Firebase Authorized domains qua Console.
