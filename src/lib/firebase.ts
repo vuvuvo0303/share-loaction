@@ -1,0 +1,8 @@
+import { initializeApp } from 'firebase/app'
+import { getAuth, browserLocalPersistence, setPersistence, connectAuthEmulator } from 'firebase/auth'
+import { getDatabase, connectDatabaseEmulator } from 'firebase/database'
+const app = initializeApp({ apiKey: import.meta.env.VITE_FIREBASE_API_KEY, authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN, databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL, projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID, appId: import.meta.env.VITE_FIREBASE_APP_ID, storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET, messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID })
+export const auth = getAuth(app)
+export const db = getDatabase(app)
+if (import.meta.env.DEV && import.meta.env.VITE_USE_FIREBASE_EMULATORS === 'true') { connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true }); connectDatabaseEmulator(db, '127.0.0.1', 9000) }
+export const persistenceReady = setPersistence(auth, browserLocalPersistence)

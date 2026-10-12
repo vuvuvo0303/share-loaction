@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@layer base {
+  body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, sans-serif; color: #24352c; background: #f9faf5; }
+  button { cursor: pointer; }
+  button:focus-visible, input:focus-visible { outline: 3px solid #dfad39; outline-offset: 3px; }
+}
+@layer components {
+  .button-secondary { @apply rounded-xl border border-stone-200 bg-white px-3 py-2 text-[#24352c] hover:bg-stone-50; }
+}
+.leaflet-container { font-family: inherit; }
+.map-pin { width:54px; height:54px; display:grid; place-items:center; font-size:28px; background:#dce8ca; border:4px solid white; border-radius:20px; box-shadow:0 4px 18px #23332e30; }
+.map-pin.self { background:#dcec88; }
+.leaflet-control-attribution { font-size:10px; }

@@ -1,0 +1,141 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "access": {
+      ".read": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && root.child('access').child(auth.uid).child('role').val() === 'admin'",
+      "$uid": {
+        ".read": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && auth.uid === $uid",
+        ".write": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && root.child('access').child(auth.uid).child('role').val() === 'admin' && auth.uid !== $uid && (!data.exists() || data.child('role').val() === 'user')",
+        ".validate": "newData.hasChildren(['role','blocked','kickedAt']) && newData.child('role').val() === 'user'",
+        "role": {
+          ".validate": "newData.val() === 'user'"
+        },
+        "blocked": {
+          ".validate": "newData.isBoolean()"
+        },
+        "kickedAt": {
+          ".validate": "newData.isNumber() && (newData.val() === data.val() || (!data.exists() && newData.val() === 0) || (newData.val() >= now - 10000 && newData.val() <= now && newData.val() >= data.val()))"
+        },
+        "$other": {
+          ".validate": false
+        },
+        "username": {
+          ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9][a-z0-9_.-]{2,31}$/)"
+        },
+        "displayName": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40"
+        }
+      }
+    },
+    "profiles": {
+      ".read": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && root.child('access').child(auth.uid).child('role').val() === 'admin'",
+      "$uid": {
+        ".read": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && auth.uid === $uid",
+        ".write": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['uid','username','displayName','email','role','createdAt','lastLoginAt']) && newData.child('uid').val() === $uid && newData.child('role').val() === root.child('access').child($uid).child('role').val() && newData.child('username').val() + '@accounts.share-location.invalid' === newData.child('email').val() && (auth.uid !== $uid || newData.child('email').val() === auth.token.email)",
+        "uid": {
+          ".validate": "newData.isString() && newData.val() === $uid"
+        },
+        "username": {
+          ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9][a-z0-9_.-]{2,31}$/)"
+        },
+        "displayName": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40"
+        },
+        "email": {
+          ".validate": "newData.isString()"
+        },
+        "role": {
+          ".validate": "newData.val() === root.child('access').child($uid).child('role').val()"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber() && (newData.val() === data.val() || (!data.exists() && newData.val() >= now - 60000 && newData.val() <= now))"
+        },
+        "lastLoginAt": {
+          ".validate": "newData.isNumber() && (newData.val() === data.val() || (newData.val() >= now - 60000 && newData.val() <= now) || (!data.exists() && newData.val() === 0 && (auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && root.child('access').child(auth.uid).child('role').val() === 'admin')))"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "locations": {
+      ".read": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && root.child('access').child(auth.uid).child('role').val() === 'admin'",
+      "$uid": {
+        ".validate": "newData.hasChildren(['name','lat','lng','accuracy','capturedAt','updatedAt'])",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40"
+        },
+        "lat": {
+          ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90"
+        },
+        "lng": {
+          ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
+        },
+        "accuracy": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000"
+        },
+        "capturedAt": {
+          ".validate": "newData.isNumber() && (newData.val() === data.val() || (newData.val() >= now - 300000 && newData.val() <= now + 300000))"
+        },
+        "updatedAt": {
+          ".validate": "newData.isNumber() && (newData.val() === data.val() || (newData.val() >= now - 60000 && newData.val() <= now))"
+        },
+        "$other": {
+          ".validate": false
+        },
+        ".read": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && auth.uid === $uid",
+        ".write": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && auth.uid === $uid"
+      }
+    },
+    "adminLocations": {
+      ".read": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val()",
+      "$uid": {
+        ".validate": "newData.hasChildren(['name','lat','lng','accuracy','capturedAt','updatedAt'])",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40"
+        },
+        "lat": {
+          ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90"
+        },
+        "lng": {
+          ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
+        },
+        "accuracy": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000"
+        },
+        "capturedAt": {
+          ".validate": "newData.isNumber() && (newData.val() === data.val() || (newData.val() >= now - 300000 && newData.val() <= now + 300000))"
+        },
+        "updatedAt": {
+          ".validate": "newData.isNumber() && (newData.val() === data.val() || (newData.val() >= now - 60000 && newData.val() <= now))"
+        },
+        "$other": {
+          ".validate": false
+        },
+        ".write": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && root.child('access').child(auth.uid).child('role').val() === 'admin' && auth.uid === $uid"
+      }
+    },
+    "presence": {
+      ".read": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && root.child('access').child(auth.uid).child('role').val() === 'admin'",
+      "$uid": {
+        ".read": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && auth.uid === $uid",
+        ".write": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && root.child('access').child(auth.uid).child('role').val() === 'admin' && root.child('access').child($uid).child('role').val() === 'user' && !newData.exists()",
+        "$session": {
+          ".write": "auth != null && auth.token.firebase.sign_in_provider === 'password' && auth.token.email.matches(/^[a-z0-9][a-z0-9_.-]{2,31}@accounts[.]share-location[.]invalid$/) && (root.child('access').child(auth.uid).child('role').val() === 'admin' || root.child('access').child(auth.uid).child('role').val() === 'user') && root.child('access').child(auth.uid).child('blocked').val() === false && root.child('access').child(auth.uid).child('kickedAt').isNumber() && auth.token.auth_time * 1000 > root.child('access').child(auth.uid).child('kickedAt').val() && auth.uid === $uid",
+          ".validate": "newData.hasChildren(['startedAt','lastSeen'])",
+          "startedAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "lastSeen": {
+            ".validate": "newData.isNumber() && newData.val() <= now"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    }
+  }
+}
